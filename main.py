@@ -1,21 +1,36 @@
 import pygame
 import sys
+from Map.Tankstelle import Tankstelle
+from player.Player import *
 
 pygame.init()
 
 display_width = 1080
 display_height = 920
 
-truckimagepath = "player/car-truck4.png"
 screen = pygame.display.set_mode((display_width, display_height))
 clock = pygame.time.Clock()
-speed = 3
-truckImg = pygame.image.load(truckimagepath)
 pygame.display.set_caption("Truckspiel")
 
 
-def truck(x, y):
-    screen.blit(truckImg, (x, y))
+#########PLAYER SETTINGS####################
+truckimagepath = "player/car-truck4.png"
+player = pygame.image.load(truckimagepath)
+player_rect = player.get_rect()
+playerspeed = 3
+
+#########Truck Settings###################
+tankstelle = Tankstelle(5000, 800, 100)
+
+
+def truck(player_rect):
+    screen.blit(player, player_rect)
+
+
+def tankedraw():
+    screen.blit(
+        tankstelle.tankstelleimg(), (tankstelle.getPosX(), tankstelle.getPosY())
+    )
 
 
 def game_loop():
@@ -31,37 +46,33 @@ def game_loop():
             if event.type == pygame.QUIT:
                 crashed = True
         if keys[pygame.K_w] & keys[pygame.K_a]:
-            y_change = -speed
-            x_change = -speed
+            y_change = -playerspeed
+            x_change = -playerspeed
         if keys[pygame.K_w] & keys[pygame.K_d]:
-            y_change = -speed
-            x_change = speed
+            y_change = -playerspeed
+            x_change = playerspeed
         if keys[pygame.K_w]:
-            y_change = -speed
-            pygame.transform.rotate(truckImg, 180)  # funkt bisher nicht
+            y_change = -playerspeed
         if keys[pygame.K_s] & keys[pygame.K_a]:
-            y_change = speed
-            x_change = -speed
+            y_change = playerspeed
+            x_change = -playerspeed
         if keys[pygame.K_s] & keys[pygame.K_d]:
-            y_change = speed
-            x_change = speed
+            y_change = playerspeed
+            x_change = playerspeed
         if keys[pygame.K_s]:
-            y_change = speed
+            y_change = playerspeed
         if keys[pygame.K_d]:
-            x_change = speed
+            x_change = playerspeed
         if keys[pygame.K_a]:
-            x_change = -speed
+            x_change = -playerspeed
 
-        x += x_change
-        y += y_change
+        player_rect.x += x_change
+        player_rect.y += y_change
         screen.fill((255, 255, 255))
-        truck(x, y)
+        truck(player_rect)
+        tankedraw()
         pygame.display.update()
         clock.tick(60)
-
-
-def Tankstelle(posx, posy, width, heigth, color):
-    pygame.draw.rect(screen, color, [posx, posy, width, heigth])
 
 
 game_loop()
