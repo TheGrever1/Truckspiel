@@ -13,5 +13,5 @@ class Tankstelle(Position):
     def tanken(self):
         self.spritkapazitat = self.spritkapazitat - 10
 
-    def tankstelleimg(self):
+    def tankstelle_surface(self):
         return pygame.image.load(self.imgpath)
